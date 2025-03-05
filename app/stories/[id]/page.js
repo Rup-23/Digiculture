@@ -2,65 +2,52 @@ import dbConnect from "@/lib/dbConnect";
 import Story from "@/models/storyModel";
 
 export default async function StoryPage({ params }) {
-  await dbConnect(); // Database se connect karo
+  await dbConnect(); // Connect to the database
 
-  if (!params || !params.id) {
+  if (!params?.id) {
     return <p className="text-center text-black">Invalid Story ID</p>;
   }
 
-  const { id } = params;
-
   let story;
   try {
-    story = await Story.findById(id);
-    console.log("Fetched Story:", story);
+    story = await Story.findById(params.id);
+    if (!story) {
+      return <p className="text-center text-black">Story not found</p>;
+    }
   } catch (error) {
     console.error("Error fetching story:", error);
-  }
-
-  if (!story) {
-    return <p className="text-center text-black">Story not found</p>;
+    return <p className="text-center text-red-500">Error loading story</p>;
   }
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-28 text-black">
       <h1 className="text-4xl font-bold mb-2">{story.title}</h1>
 
-      {/* 🔹 Story Type Display */}
       <h2 className="text-lg font-semibold text-gray-600 mb-4">
         Story Type: <span className="text-black">{story.storyType || "Unknown"}</span>
       </h2>
 
-      {story.content ? (
-        <div dangerouslySetInnerHTML={{ __html: story.content }} className="prose max-w-none" />
-      ) : (
-        <>
-          {/* Image */}
-          {story.imageUrl && story.imageUrl.trim() !== "" && (
-            <img
-              src={story.imageUrl.split(",")[0]}
-              alt={story.title}
-              className="w-60 h-44 rounded-lg mb-4"
-            />
-          )}
-
-          {/* Description */}
-          <h2 className="text-xl font-semibold mt-6 mb-5">Description :</h2>
-          <p className="text-lg">{story.description}</p>
-
-          {/* Video Section */}
-          {story.videoUrl && story.videoUrl.trim() !== "" && (
-            <div className="mt-4">
-              <h2 className="text-xl font-semibold mb-2">Watch Video:</h2>
-              <video controls className="w-full max-w-md">
-                <source src={story.videoUrl} type="video/mp4" />
-                Your browser does not support the video tag.
+      {/* Render story content in the correct order */}
+      <div className="space-y-4">
+        {story.content.map((item, index) => (
+          <div key={index} className="border p-4 rounded-lg bg-gray-50">
+            {item.type === "text" && <p className="text-lg">{item.value}</p>}
+            {item.type === "image" && (
+              <img src={item.value} alt="Story Image" className="w-full max-h-60 object-cover rounded-lg" />
+            )}
+            {item.type === "video" && (
+              <video controls className="w-full max-h-60 rounded-lg">
+                <source src={item.value} />
               </video>
-            </div>
-          )}
-        </>
-      )}
+            )}
+            {item.type === "audio" && (
+              <audio controls className="w-full">
+                <source src={item.value} />
+              </audio>
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
-

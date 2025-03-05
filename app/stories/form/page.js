@@ -2,74 +2,159 @@
 import { useState } from "react";
 import { CldUploadWidget } from "next-cloudinary";
 
-const StoryForm = () => {
+const StorySubmission = () => {
   const [formData, setFormData] = useState({
     title: "",
-    description: "",
     storyType: "",
-    mediaType: "",
-    images: [],
-    audios: [],
-    videos: [],
+    content: [],
   });
 
-  const handleChange = (e) => {
-    const { id, value } = e.target;
-    setFormData((prev) => ({ ...prev, [id]: value }));
+  const addContent = (type, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      content: [...prev.content, { type, value }],
+    }));
   };
 
-  const handleCloudinaryUpload = (type, result) => {
-    setFormData((prev) => ({ ...prev, [type]: [...prev[type], result.info.secure_url] }));
+  const handleTextChange = (index, value) => {
+    const updatedContent = [...formData.content];
+    updatedContent[index].value = value;
+    setFormData((prev) => ({ ...prev, content: updatedContent }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const removeContent = (index) => {
+    setFormData((prev) => ({
+      ...prev,
+      content: prev.content.filter((_, i) => i !== index),
+    }));
+  };
+
+  const handleCloudinaryUpload = (result, mediaType) => {
+    if (result.event === "success") {
+      addContent(mediaType, result.info.secure_url);
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!formData.title.trim() || !formData.storyType || formData.content.length === 0) {
+      alert("Please fill all required fields.");
+      return;
+    }
+
     const response = await fetch("/api/stories", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
     });
-    response.ok ? alert("Story submitted successfully!") : alert("Error submitting story.");
+
+    if (response.ok) {
+      alert("Story submitted successfully!");
+      setFormData({ title: "", storyType: "", content: [] }); // Reset form after successful submission
+    } else {
+      alert("Error submitting story.");
+    }
   };
 
   return (
-    <div className="max-w-3xl mx-auto py-20 px-8 bg-gray-100 rounded-lg shadow-lg">
-      <h1 className="text-4xl font-bold text-center mb-6 text-gray-800">📖 Share Your Story</h1>
-      <p className="text-center text-gray-600 mb-8">Your stories matter. Inspire, educate, and share with the world.</p>
-      
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <input id="title" type="text" placeholder="Story Title" value={formData.title} onChange={handleChange} className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required />
-        
-        <textarea id="description" placeholder="Write your story..." value={formData.description} onChange={handleChange} rows="10" className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required />
-        
-        <div className="grid grid-cols-2 gap-4">
-          <select id="storyType" value={formData.storyType} onChange={handleChange} className="w-full p-3 border rounded-lg">
-            <option value="">Select Story Type</option>
-            {['Real-Life', 'Folklore', 'Myth', 'Local Culture'].map((opt) => <option key={opt} value={opt}>{opt}</option>)}
-          </select>
-          <select id="mediaType" value={formData.mediaType} onChange={handleChange} className="w-full p-3 border rounded-lg">
-            <option value="">Select Media Type</option>
-            {['text', 'image', 'audio', 'video', 'all'].map((opt) => <option key={opt} value={opt}>{opt}</option>)}
-          </select>
-        </div>
-        
-        {['images', 'audios', 'videos'].map((type) => (
-          (formData.mediaType === type.slice(0, -1) || formData.mediaType === "all") && (
-            <div key={type} className="bg-white p-4 rounded-lg shadow">
-              <label className="block text-lg font-semibold mb-2">Upload {type.charAt(0).toUpperCase() + type.slice(1)}</label>
-              <CldUploadWidget uploadPreset="nextjs" onSuccess={(res) => handleCloudinaryUpload(type, res)}>
-                {({ open }) => <button type="button" onClick={() => open()} className="bg-blue-600 text-sm font-semibold text-white px-4 py-2 rounded-lg">Upload {type}</button>}
-              </CldUploadWidget>
-              {formData[type].length > 0 && <p className="mt-2 text-green-500">Uploaded {type}: {formData[type].length}</p>}
+    <div className="bg-gray-100 min-h-screen flex items-center justify-center p-6">
+      <div className="max-w-3xl w-full p-6 rounded-xl shadow-lg bg-white space-y-6">
+        <h1 className="text-3xl font-bold text-center text-indigo-600">Tell Your Story</h1>
+
+        {/* Story Title Input */}
+        <input
+          type="text"
+          placeholder="Enter your story title..."
+          value={formData.title}
+          onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
+          className="w-full p-3 border rounded-md focus:border-indigo-500"
+          required
+        />
+
+        {/* Story Type Selection */}
+        <select
+          value={formData.storyType}
+          onChange={(e) => setFormData((prev) => ({ ...prev, storyType: e.target.value }))}
+          className="p-3 border rounded-md w-full"
+        >
+          <option value="">Select Story Type</option>
+          {["Real-Life", "Folklore", "Myth", "Local Culture"].map((opt) => (
+            <option key={opt} value={opt}>
+              {opt}
+            </option>
+          ))}
+        </select>
+
+        {/* Content List */}
+        <div className="space-y-4">
+          {formData.content.map((item, index) => (
+            <div key={index} className="relative p-4 bg-gray-50 border rounded-lg">
+              {/* Remove Button */}
+              <button
+                onClick={() => removeContent(index)}
+                className="absolute top-2 right-2 text-white px-3 py-2 rounded-full z-10"
+              >
+                ❌
+              </button>
+
+              {/* Display Content Based on Type */}
+              {item.type === "text" ? (
+                <textarea
+                  value={item.value}
+                  onChange={(e) => handleTextChange(index, e.target.value)}
+                  rows="3"
+                  className="w-full p-2 border rounded-md"
+                  placeholder="Write your story..."
+                />
+              ) : item.type === "image" ? (
+                <img src={item.value} alt="Uploaded" className="w-full max-h-60 object-cover rounded-lg" />
+              ) : item.type === "video" ? (
+                <video controls className="w-full max-h-60 rounded-lg">
+                  <source src={item.value} />
+                </video>
+              ) : item.type === "audio" ? (
+                <audio controls className="w-full">
+                  <source src={item.value} />
+                </audio>
+              ) : null}
             </div>
-          )
-        ))}
-        
-        <button type="submit" className="w-full bg-green-600 text-white py-3 rounded-lg text-lg font-semibold">Submit Story</button>
-      </form>
+          ))}
+        </div>
+
+        {/* Add Text Content Button */}
+        <button
+          onClick={() => addContent("text", "")}
+          className="bg-green-500 text-white px-4 py-2 rounded-md w-full"
+        >
+          ➕ Add Text
+        </button>
+
+        {/* Cloudinary Upload Buttons for Media */}
+        <div className="flex flex-wrap gap-2">
+          {["image", "audio", "video"].map((type) => (
+            <CldUploadWidget key={type} uploadPreset="nextjs" onSuccess={(res) => handleCloudinaryUpload(res, type)}>
+              {({ open }) => (
+                <button
+                  type="button"
+                  onClick={() => open()}
+                  className="bg-indigo-500 text-white px-4 py-2 rounded-md w-full"
+                >
+                  📤 Upload {type.charAt(0).toUpperCase() + type.slice(1)}
+                </button>
+              )}
+            </CldUploadWidget>
+          ))}
+        </div>
+
+        {/* Submit Button */}
+        <button
+          onClick={handleSubmit}
+          className="bg-yellow-400 text-black py-2 px-6 rounded-md w-full font-bold hover:bg-yellow-500"
+        >
+          🚀 Share Your Story
+        </button>
+      </div>
     </div>
   );
 };
 
-export default StoryForm;
-
+export default StorySubmission;

@@ -3,17 +3,17 @@ import Story from "@/models/storyModel";
 
 export async function GET(req) {
   try {
-    await dbConnect(); // Database connect karna
+    await dbConnect();
 
     const { searchParams } = new URL(req.url);
-    const category = searchParams.get("category"); // ?category=Folklore
+    const category = searchParams.get("category");
 
     let filter = {};
     if (category) {
-      filter.storyType = category; // Filter by storyType if category exists
+      filter.storyType = category;
     }
 
-    const stories = await Story.find(filter); // Filtered stories fetch karna
+    const stories = await Story.find(filter).sort({ createdAt: -1 });
 
     return new Response(JSON.stringify(stories), {
       status: 200,
@@ -21,7 +21,7 @@ export async function GET(req) {
     });
   } catch (error) {
     console.error("Error fetching stories:", error);
-    return new Response(JSON.stringify({ message: "Error fetching stories" }), {
+    return new Response(JSON.stringify({ message: "Error fetching stories." }), {
       status: 500,
     });
   }
@@ -29,45 +29,43 @@ export async function GET(req) {
 
 export async function POST(req) {
   try {
-    await dbConnect(); // Database connect karna
+    await dbConnect(); // Connect to MongoDB
 
-    // Request body parse karna
-    const { title, description, storyType, mediaType, images, audios, videos } = await req.json();
+    const { title, storyType, content } = await req.json();
 
-    if (!title || !description || !storyType) {
-      return new Response(JSON.stringify({ message: "Title, description, and category are required." }), {
-        status: 400,
-      });
+    // Validate required fields
+    if (!title || !storyType || !content || !Array.isArray(content) || content.length === 0) {
+      return new Response(
+        JSON.stringify({ message: "Title, storyType, and content are required." }),
+        { status: 400 }
+      );
     }
 
-    // Ensure that at least one media URL (image, audio, or video) is provided
-    if (!images?.length && !audios?.length && !videos?.length) {
-      return new Response(JSON.stringify({ message: "At least one media file is required." }), {
-        status: 400,
-      });
-    }
+    // Allowed content types
+    const allowedTypes = ["text", "image", "audio", "video"];
 
-    // Join arrays into strings for storage
-    const imageUrls = images?.join(", ") || "";
-    const audioUrls = audios?.join(", ") || "";
-    const videoUrls = videos?.join(", ") || "";
+    // Validate each content item
+    for (const item of content) {
+      if (!item.type || !allowedTypes.includes(item.type) || !item.value) {
+        return new Response(
+          JSON.stringify({ message: "Invalid content format. Each item must have a valid type and value." }),
+          { status: 400 }
+        );
+      }
+    }
 
     // Create a new story document
     const newStory = new Story({
       title,
-      description,
-      storyType, // Ensure storyType (category) is saved
-      mediaType,
-      imageUrl: imageUrls,
-      audioUrl: audioUrls,
-      videoUrl: videoUrls,
+      storyType,
+      content,
     });
 
-    // Save to the database
+    // Save to database
     await newStory.save();
 
     return new Response(JSON.stringify({ message: "Story submitted successfully!" }), {
-      status: 200,
+      status: 201, // Changed to 201 (Created)
     });
   } catch (error) {
     console.error("Error submitting story:", error);
@@ -76,5 +74,3 @@ export async function POST(req) {
     });
   }
 }
-
-
