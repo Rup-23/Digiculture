@@ -1,49 +1,68 @@
 // import dbConnect from "@/lib/dbConnect";
 // import Story from "@/models/storyModel";
+// import Link from "next/link";
 
 // export default async function StoryPage({ params }) {
-//   await dbConnect(); // Connect to the database
+//   await dbConnect();
 
 //   if (!params?.id) {
-//     return <p className="text-center text-black">Invalid Story ID</p>;
+//     return <p className="text-center text-gray-400 text-xl font-semibold">Invalid Story ID</p>;
 //   }
 
 //   let story;
 //   try {
 //     story = await Story.findById(params.id);
 //     if (!story) {
-//       return <p className="text-center text-black">Story not found</p>;
+//       return <p className="text-center text-gray-400 text-xl font-semibold">Story not found</p>;
 //     }
 //   } catch (error) {
 //     console.error("Error fetching story:", error);
-//     return <p className="text-center text-red-500">Error loading story</p>;
+//     return <p className="text-center text-red-500 text-xl font-semibold">Error loading story</p>;
 //   }
 
 //   return (
-//     <div className="max-w-3xl mx-auto px-6 py-28 text-black">
-//       <h1 className="text-4xl font-bold mb-2">{story.title}</h1>
+//     <div className="w-full min-h-screen bg-black text-gray-200 flex flex-col items-center py-24 px-5">
+      
+//       {/* Museum-Like Title Display */}
+//       <div className="text-center border-b-4 border-gray-600 pb-4 w-full max-w-5xl">
+//         <h1 className="text-6xl font-extrabold text-gray-100 uppercase tracking-wide">
+//           {story.title}
+//         </h1>
+//         <h2 className="text-lg font-semibold text-gray-400 mt-4">
+//           Story Type: <span className="text-gray-300">{story.storyType || "Unknown"}</span>
+//         </h2>
+//       </div>
 
-//       <h2 className="text-lg font-semibold text-gray-600 mb-4">
-//         Story Type: <span className="text-black">{story.storyType || "Unknown"}</span>
-//       </h2>
-
-//       {/* Render story content in the correct order */}
-//       <div className="space-y-4">
+//       {/* Content as Museum Exhibits */}
+//       <div className="w-full max-w-6xl flex flex-col gap-16 mt-12">
 //         {story.content.map((item, index) => (
-//           <div key={index} className="border p-4 rounded-lg bg-gray-50">
-//             {item.type === "text" && <p className="text-lg">{item.value}</p>}
+//           <div 
+//             key={index} 
+//             className="relative w-full flex flex-col items-center md:flex-row md:items-center md:justify-center border border-gray-600 p-6 rounded-lg shadow-lg transition-transform hover:scale-[1.02] bg-gray-900"
+//           >
+//             {item.type === "text" && (
+//               <p className="text-2xl italic leading-relaxed text-gray-300 max-w-4xl text-center">
+//                 "{item.value}"
+//               </p>
+//             )}
 //             {item.type === "image" && (
-//               <img src={item.value} alt="Story Image" className="w-full max-h-60 object-contain rounded-lg" />
+//               <div className="flex justify-center w-full">
+//                 <img src={item.value} alt="Story Exhibit" className="w-[300px] h-[300px] max-w-3xl object-cover rounded-lg shadow-md border-4 border-gray-700" />
+//               </div>
 //             )}
 //             {item.type === "video" && (
-//               <video controls className="w-full max-h-60 rounded-lg">
-//                 <source src={item.value} />
-//               </video>
+//               <div className="flex justify-center w-full">
+//                 <video controls className="w-full max-w-3xl rounded-lg shadow-md border-4 border-gray-700">
+//                   <source src={item.value} />
+//                 </video>
+//               </div>
 //             )}
 //             {item.type === "audio" && (
-//               <audio controls className="w-full">
-//                 <source src={item.value} />
-//               </audio>
+//               <div className="flex justify-center w-full">
+//                 <audio controls className="w-3/4">
+//                   <source src={item.value} />
+//                 </audio>
+//               </div>
 //             )}
 //           </div>
 //         ))}
@@ -53,21 +72,23 @@
 // }
 
 
+
 import dbConnect from "@/lib/dbConnect";
 import Story from "@/models/storyModel";
+import Link from "next/link";
 
 export default async function StoryPage({ params }) {
-  await dbConnect(); // Connect to the database
+  await dbConnect();
 
   if (!params?.id) {
-    return <p className="text-center text-gray-700 text-xl font-semibold">Invalid Story ID</p>;
+    return <p className="text-center text-gray-400 text-xl font-semibold">Invalid Story ID</p>;
   }
 
   let story;
   try {
     story = await Story.findById(params.id);
     if (!story) {
-      return <p className="text-center text-gray-700 text-xl font-semibold">Story not found</p>;
+      return <p className="text-center text-gray-400 text-xl font-semibold">Story not found</p>;
     }
   } catch (error) {
     console.error("Error fetching story:", error);
@@ -75,32 +96,43 @@ export default async function StoryPage({ params }) {
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-24 text-gray-900 bg-white shadow-lg rounded-lg">
-      <h1 className="text-4xl font-extrabold mb-4 text-center text-blue-600">{story.title}</h1>
+    <div className="w-full min-h-screen bg-[#121212] text-gray-200 flex flex-col items-center py-24 px-5">
+      {/* Museum-Like Title Display */}
+      <div className="text-center border-b-8 border-[#FFD700] pb-6 w-full max-w-5xl">
+        <h1 className="text-5xl font-extrabold text-[#FFD700] uppercase tracking-widest">
+          {story.title}
+        </h1>
+        <h2 className="text-lg font-semibold text-gray-400 mt-4">
+          Story Type: <span className="text-gray-300">{story.storyType || "Unknown"}</span>
+        </h2>
+      </div>
 
-      <h2 className="text-lg font-semibold text-gray-500 mb-6 text-center">
-        Story Type: <span className="text-gray-800">{story.storyType || "Unknown"}</span>
-      </h2>
-
-      {/* Render story content in the correct order */}
-      <div className="space-y-6">
+      {/* Content as Digital Museum Exhibits */}
+      <div className="w-full max-w-6xl flex flex-col gap-20 mt-16">
         {story.content.map((item, index) => (
-          <div key={index} className="border p-5 rounded-xl bg-gray-50 shadow-sm">
-            {item.type === "text" && <p className="text-lg leading-relaxed text-gray-800">{item.value}</p>}
+          <div 
+            key={index} 
+            className="relative w-full flex flex-col items-center md:flex-row md:items-center md:justify-center border border-gray-700 p-8 rounded-lg shadow-lg transition-transform hover:scale-[1.05] bg-[#1e1e1e]"
+          >
+            {item.type === "text" && (
+              <p className="text-xl leading-relaxed text-gray-300 max-w-4xl text-justify font-serif">
+                "{item.value}"
+              </p>
+            )}
             {item.type === "image" && (
-              <img
-                src={item.value}
-                alt="Story Image"
-                className="w-full max-h-80 object-contain rounded-xl shadow-md"
-              />
+              <div className="flex justify-center w-full">
+                <img src={item.value} alt="Story Exhibit" className="w-[400px] h-[400px] object-cover rounded-lg shadow-md border-4 border-[#FFD700]" />
+              </div>
             )}
             {item.type === "video" && (
-              <video controls className="w-full max-h-80 rounded-xl shadow-md">
-                <source src={item.value} />
-              </video>
+              <div className="flex justify-center w-full">
+                <video controls className="w-[300px] max-w-3xl rounded-lg shadow-md border-4 border-[#FFD700]">
+                  <source src={item.value} />
+                </video>
+              </div>
             )}
             {item.type === "audio" && (
-              <div className="flex justify-center">
+              <div className="flex justify-center w-full">
                 <audio controls className="w-3/4">
                   <source src={item.value} />
                 </audio>
@@ -108,6 +140,19 @@ export default async function StoryPage({ params }) {
             )}
           </div>
         ))}
+      </div>
+
+      {/* Share Your Story Section */}
+      <div className="container mx-auto text-center mt-24">
+        <h2 className="text-5xl font-bold text-[#FFD700] mb-6">Share Your Story</h2>
+        <p className="text-xl text-gray-400 mb-8 leading-relaxed font-medium max-w-2xl mx-auto">
+          Contribute your untold narratives and help us expand the tapestry of human history.
+        </p>
+        <Link href="/stories/form">
+          <button className="bg-[#FFD700] text-gray-900 font-bold py-3 px-6 rounded-lg shadow-md hover:shadow-xl transition-all">
+            Share Your Story
+          </button>
+        </Link>
       </div>
     </div>
   );
