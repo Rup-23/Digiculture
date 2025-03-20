@@ -22,43 +22,45 @@ export default async function StoryPage({ params }) {
 
   return (
     <div className="w-full min-h-screen bg-[#121212] text-gray-200 flex flex-col items-center py-24 px-5">
-      {/* Museum-Like Title Display */}
-      <div className="text-center border-b-8 border-[#FFD700] pb-6 w-full max-w-5xl">
+      
+      {/* Title Section */}
+      <div className="text-center pb-6 w-full max-w-4xl">
         <h1 className="text-5xl font-extrabold text-[#FFD700] uppercase tracking-widest">
           {story.title}
         </h1>
-        <h2 className="text-lg font-semibold text-gray-400 mt-4">
+        <h2 className="text-lg font-semibold text-gray-400 mt-2">
           Story Type: <span className="text-gray-300">{story.storyType || "Unknown"}</span>
         </h2>
       </div>
 
-      {/* Content as Digital Museum Exhibits */}
-      <div className="w-full max-w-6xl flex flex-col gap-20 mt-16">
+      {/* Story Content */}
+      <div className="w-full max-w-4xl flex flex-col gap-12 mt-12">
         {story.content.map((item, index) => (
-          <div 
-            key={index} 
-            className="relative w-full flex flex-col items-center md:flex-row md:items-center md:justify-center border border-gray-700 p-8 rounded-lg shadow-lg transition-transform hover:scale-[1.05] bg-[#1e1e1e]"
-          >
+          <div key={index} className="w-full">
             {item.type === "text" && (
-              <p className="text-xl leading-relaxed text-gray-300 max-w-4xl text-justify font-serif">
+              <p className="text-lg leading-relaxed text-gray-300 text-justify font-serif">
                 "{item.value}"
               </p>
             )}
             {item.type === "image" && (
-              <div className="flex justify-center w-full">
-                <img src={item.value} alt="Story Exhibit" className="w-[400px] h-[400px] object-cover rounded-lg shadow-md border-4 border-[#FFD700]" />
+              <div className="flex justify-center my-4">
+                <img 
+                  src={item.value} 
+                  alt="Story Exhibit" 
+                  className="w-full max-w-3xl rounded-lg shadow-md object-contain border-4 border-[#FFD700]"
+                />
               </div>
             )}
             {item.type === "video" && (
-              <div className="flex justify-center w-full">
-                <video controls className="w-[300px] max-w-3xl rounded-lg shadow-md border-4 border-[#FFD700]">
+              <div className="flex justify-center my-4">
+                <video controls className="w-[400px] h-[400px] max-w-2xl rounded-lg shadow-md border-4 border-[#FFD700]">
                   <source src={item.value} />
                 </video>
               </div>
             )}
             {item.type === "audio" && (
-              <div className="flex justify-center w-full">
-                <audio controls className="w-3/4">
+              <div className="flex justify-center my-4">
+                <audio controls className="w-full max-w-md">
                   <source src={item.value} />
                 </audio>
               </div>
