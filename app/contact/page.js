@@ -6,7 +6,7 @@ import { FaUser, FaEnvelope, FaPaperPlane } from "react-icons/fa";
 const Contact = () => {
   return (
     <div className="w-full min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-black via-gray-900 to-black text-gray-200 px-6 py-24">
-      <h1 className="text-5xl font-extrabold text-center text-gold-500 mb-6 tracking-wide drop-shadow-lg">
+      <h1 className="text-5xl font-extrabold text-center text-gold-500 mb-6 tracking-wide drop-shadow-lg text-[#FFD700]">
         Contact The Digital Museum
       </h1>
       <p className="text-lg text-center text-gray-400 max-w-2xl mb-10">
@@ -52,7 +52,7 @@ const Contact = () => {
 
           <button
             type="submit"
-            className="w-full flex items-center justify-center bg-[#bdac4e] text-gray-900 font-semibold py-3 rounded-lg shadow-md transition duration-300"
+            className="w-full flex items-center justify-center bg-[#FFD700] text-gray-900 font-semibold py-3 rounded-lg shadow-md transition duration-300"
           >
             <FaPaperPlane className="mr-2" /> Send Message
           </button>
@@ -76,10 +76,10 @@ const Contact = () => {
           Share your own untold stories and contribute to a global collection of hidden narratives.
         </p>
         <Link href="/stories/form">
-          <button className="bg-gold-500 bg-[#bdac4e] text-gray-900 font-bold py-3 px-6 rounded-lg shadow-md transition-all">
-            Share Your Story
-          </button>
-        </Link>
+            <button className="bg-[#FFD700] text-gray-900 font-bold py-3 px-6 rounded-lg shadow-md hover:shadow-xl transition-all">
+              Share Your Story
+            </button>
+          </Link>
       </div>
     </div>
   );

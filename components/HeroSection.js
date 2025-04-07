@@ -36,7 +36,7 @@ export default function HeroSection() {
         transition={{ duration: 1, ease: "easeOut" }}
       >
         <h1 className="text-5xl md:text-6xl font-extrabold mb-4 text-yellow-400 drop-shadow-lg">
-          Discover the Untold Stories of the Past
+          Discover the Untold Stories
         </h1>
         <p className="text-lg md:text-xl mb-6 max-w-2xl mx-auto text-gray-300 drop-shadow-lg">
           Dive into the forgotten myths, ancient civilizations, and hidden truths that shaped our world.

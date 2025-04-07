@@ -71,7 +71,7 @@ const HomePage = () => {
 
       {/* Introductory Text */}
       <div className="text-center mb-12 px-6">
-        <p className="text-lg m-8 text-gray-300 text-justify">
+        <p className="text-lg ml-2 mr-2 text-gray-300 text-justify">
           Welcome to the Digital Museum of Untold Stories, a platform dedicated to sharing and preserving the myths, folklore, and real-life experiences that shape our diverse cultures. 
           Here, anyone can contribute their personal stories, local traditions, or ancient legends, ensuring that these narratives are never forgotten. Join us in preserving history, one story at a time.History is often written in books, but the most powerful stories often go untold. This is a place for those stories – the ones that are passed down through generations, the stories that shape our communities, and the narratives that are left behind in the shadows of mainstream media. Here, every story matters. Whether it's a tale of mythical creatures or the real struggles of everyday life, we preserve them, cherish them, and share them with the world
         </p>
@@ -105,7 +105,7 @@ const HomePage = () => {
       {/* Latest Stories Section */}
       <h2 className="text-4xl text-center font-bold mt-12 text-[#f4c95d]">Latest Exhibits</h2>
       <div className="text-center mb-8 px-6 text-lg text-gray-300">
-        <p className="text-justify text-lg m-8 text-gray-300">
+        <p className="text-justify text-lg ml-2 mr-2 mt-11 text-gray-300">
           Explore our latest collection of exhibits, ranging from ancient folklore to real-life stories that have shaped the communities around us. These exhibits represent the diversity and richness of untold narratives.Our latest exhibits are a collection of voices that have been waiting to be heard. These stories are not just words on a page – they are the lived experiences of individuals, woven into narratives that inspire, teach, and move us. Each one is a window into a different world, and we invite you to explore them."
           As we gather and preserve these stories, we hope to create a space where people from all walks of life can share their truths, connect with one another, and learn from each other. This is not just a museum – it’s a living, breathing testament to the power of storytelling.
         </p>
