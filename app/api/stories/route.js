@@ -8,7 +8,9 @@ export async function GET(req) {
   try {
     await dbConnect();
 
-    const { searchParams } = new URL(req.url, process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000");
+    const { searchParams } = new URL(req.url,process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000");  
+    // const { searchParams } = new URL(req.url, `http://${req.headers.get("host")}`);
+
 
     const status = searchParams.get("status") || "approved"; // Default to "approved" stories
     const category = searchParams.get("category"); // Get category from query params
