@@ -55,8 +55,8 @@ const HomePage = () => {
   }, [selectedCategory]);
 
   const sections = [
-    { name: "Folklore", image: "/img4.jpg", desc: "Tales from the past, passed down through generations." },
-    { name: "Myth", image: "/img5.jpg", desc: "Legends, gods, and the mystical elements that shape our beliefs." },
+    { name: "Folklore", image: "/img10.jpg", desc: "Tales from the past, passed down through generations." },
+    { name: "Myth", image: "/img4.jpg", desc: "Legends, gods, and the mystical elements that shape our beliefs." },
     { name: "Real-Life", image: "/img7.jpg", desc: "True stories of ordinary people doing extraordinary things." },
     { name: "Local Culture", image: "/img9.jpg", desc: "Traditions, rituals, and customs that define a community." },
   ];

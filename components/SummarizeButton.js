@@ -52,7 +52,7 @@ export default function SummarizeButton({ storyText }) {
       {summary && (
         <div className="mt-6 bg-gray-900 p-6 rounded-xl border border-yellow-600">
           <h3 className="text-xl font-semibold text-yellow-300 mb-2">AI Summary:</h3>
-          <p className="text-gray-300">{summary}</p>
+          <p className="text-gray-300 text-lg text-justify">{summary}</p>
         </div>
       )}
     </div>
