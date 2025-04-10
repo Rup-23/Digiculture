@@ -1,21 +1,85 @@
+// "use client";
+
+// import { useState } from "react";
+
+
+// export default function SummarizeButton({ storyText }) {
+//   const [summary, setSummary] = useState(null);
+//   const [loading, setLoading] = useState(false);
+//   const [error, setError] = useState("");
+
+//   const handleSummarize = async () => {
+//     if (!storyText || storyText.trim() === "") {
+//       setError("No story content found to summarize.");
+//       return;
+//     }
+
+//     setLoading(true);
+//     setError("");
+//     try {
+//       const res = await fetch("/api/summarize", {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({ text: storyText }),
+//       });
+
+//       const data = await res.json();
+//       if (!data.success) throw new Error(data.message);
+
+//       setSummary(data.summary);
+//     } catch (err) {
+//       setError(err.message || "Something went wrong");
+//       console.error("Fetch error:", err);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   return (
+//     <div className="text-center mt-12">
+//       <button
+//         onClick={handleSummarize}
+//         className="bg-[#FFD700] text-black px-6 py-3 rounded-lg font-bold hover:bg-yellow-400 transition-all"
+//         disabled={loading}
+//       >
+//         {loading ? "Summarizing..." : "Summarize This Story"}
+//       </button>
+
+//       {error && <p className="text-red-500 mt-4">{error}</p>}
+
+//       {summary && (
+//         <div className="mt-6 bg-gray-900 p-6 rounded-xl border border-yellow-600">
+//           <h3 className="text-xl font-semibold text-yellow-300 mb-2">AI Summary:</h3>
+//           <p className="text-gray-300 text-lg text-justify">{summary}</p>
+//         </div>
+//       )}
+//     </div>
+//   );
+// }
+
+
 "use client";
 
-import { useState } from "react";
-
+import { useState, useRef, useEffect } from "react";
 
 export default function SummarizeButton({ storyText }) {
   const [summary, setSummary] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const summaryRef = useRef(null);
 
   const handleSummarize = async () => {
     if (!storyText || storyText.trim() === "") {
       setError("No story content found to summarize.");
       return;
     }
-
+  
     setLoading(true);
     setError("");
+    setSummary(null);
+  
     try {
       const res = await fetch("/api/summarize", {
         method: "POST",
@@ -24,18 +88,41 @@ export default function SummarizeButton({ storyText }) {
         },
         body: JSON.stringify({ text: storyText }),
       });
-
-      const data = await res.json();
-      if (!data.success) throw new Error(data.message);
-
+  
+      let data;
+  
+      // Try to parse JSON safely
+      try {
+        data = await res.json();
+      } catch (jsonErr) {
+        const fallback = await res.text();
+        console.error("Gemini gave non-JSON:", fallback);
+        throw new Error("AI service returned a broken response.");
+      }
+  
+      // Check response success
+      if (!res.ok || !data.success) {
+        console.error("Gemini API Error Response:", data);
+        throw new Error(data.message || "Gemini service failed to summarize.");
+      }
+  
+      // Set final summary
       setSummary(data.summary);
     } catch (err) {
-      setError(err.message || "Something went wrong");
       console.error("Fetch error:", err);
+      setError(err.message || "Something went wrong while summarizing.");
     } finally {
       setLoading(false);
     }
   };
+  
+
+  // Auto-scroll to summary when it appears
+  useEffect(() => {
+    if (summary && summaryRef.current) {
+      summaryRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [summary]);
 
   return (
     <div className="text-center mt-12">
@@ -50,8 +137,13 @@ export default function SummarizeButton({ storyText }) {
       {error && <p className="text-red-500 mt-4">{error}</p>}
 
       {summary && (
-        <div className="mt-6 bg-gray-900 p-6 rounded-xl border border-yellow-600">
-          <h3 className="text-xl font-semibold text-yellow-300 mb-2">AI Summary:</h3>
+        <div
+          ref={summaryRef}
+          className="mt-6 bg-gray-900 p-6 rounded-xl border border-yellow-600"
+        >
+          <h3 className="text-xl font-semibold text-yellow-300 mb-2">
+            AI Summary:
+          </h3>
           <p className="text-gray-300 text-lg text-justify">{summary}</p>
         </div>
       )}
