@@ -60,6 +60,7 @@
 // }
 
 
+
 "use client";
 
 import { useState, useRef, useEffect } from "react";
@@ -68,18 +69,27 @@ export default function SummarizeButton({ storyText }) {
   const [summary, setSummary] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [retryCount, setRetryCount] = useState(0);
   const summaryRef = useRef(null);
+
+  const MAX_RETRIES = 3;
+  const RETRY_DELAY = 3000; // milliseconds
 
   const handleSummarize = async () => {
     if (!storyText || storyText.trim() === "") {
       setError("No story content found to summarize.");
       return;
     }
-  
+
     setLoading(true);
     setError("");
     setSummary(null);
-  
+    setRetryCount(0);
+
+    await trySummarize();
+  };
+
+  const trySummarize = async (attempt = 1) => {
     try {
       const res = await fetch("/api/summarize", {
         method: "POST",
@@ -88,10 +98,9 @@ export default function SummarizeButton({ storyText }) {
         },
         body: JSON.stringify({ text: storyText }),
       });
-  
+
       let data;
-  
-      // Try to parse JSON safely
+
       try {
         data = await res.json();
       } catch (jsonErr) {
@@ -99,14 +108,18 @@ export default function SummarizeButton({ storyText }) {
         console.error("Gemini gave non-JSON:", fallback);
         throw new Error("AI service returned a broken response.");
       }
-  
-      // Check response success
+
       if (!res.ok || !data.success) {
+        if (data.message?.toLowerCase().includes("quota") && attempt < MAX_RETRIES) {
+          console.warn(`Quota issue detected. Retrying in ${RETRY_DELAY / 1000}s... (Attempt ${attempt})`);
+          setTimeout(() => trySummarize(attempt + 1), RETRY_DELAY);
+          return;
+        }
+
         console.error("Gemini API Error Response:", data);
         throw new Error(data.message || "Gemini service failed to summarize.");
       }
-  
-      // Set final summary
+
       setSummary(data.summary);
     } catch (err) {
       console.error("Fetch error:", err);
@@ -115,9 +128,7 @@ export default function SummarizeButton({ storyText }) {
       setLoading(false);
     }
   };
-  
 
-  // Auto-scroll to summary when it appears
   useEffect(() => {
     if (summary && summaryRef.current) {
       summaryRef.current.scrollIntoView({ behavior: "smooth" });
