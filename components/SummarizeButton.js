@@ -60,7 +60,6 @@
 // }
 
 
-
 "use client";
 
 import { useState, useRef, useEffect } from "react";
@@ -69,11 +68,10 @@ export default function SummarizeButton({ storyText }) {
   const [summary, setSummary] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [retryCount, setRetryCount] = useState(0);
   const summaryRef = useRef(null);
 
   const MAX_RETRIES = 3;
-  const RETRY_DELAY = 3000; // milliseconds
+  const RETRY_DELAY = 3000;
 
   const handleSummarize = async () => {
     if (!storyText || storyText.trim() === "") {
@@ -84,12 +82,11 @@ export default function SummarizeButton({ storyText }) {
     setLoading(true);
     setError("");
     setSummary(null);
-    setRetryCount(0);
 
-    await trySummarize();
+    await trySummarize(1);
   };
 
-  const trySummarize = async (attempt = 1) => {
+  const trySummarize = async (attempt) => {
     try {
       const res = await fetch("/api/summarize", {
         method: "POST",
@@ -99,31 +96,32 @@ export default function SummarizeButton({ storyText }) {
         body: JSON.stringify({ text: storyText }),
       });
 
-      let data;
+      const rawText = await res.text(); // ✅ Only read once!
 
+      let data;
       try {
-        data = await res.json();
-      } catch (jsonErr) {
-        const fallback = await res.text();
-        console.error("Gemini gave non-JSON:", fallback);
-        throw new Error("AI service returned a broken response.");
+        data = JSON.parse(rawText); // safely parse
+      } catch (err) {
+        console.error("Non-JSON response from Gemini:", rawText);
+        throw new Error("AI service returned an unexpected response.");
       }
 
       if (!res.ok || !data.success) {
-        if (data.message?.toLowerCase().includes("quota") && attempt < MAX_RETRIES) {
+        const message = data.message?.toLowerCase() || "";
+
+        if (message.includes("quota") && attempt < MAX_RETRIES) {
           console.warn(`Quota issue detected. Retrying in ${RETRY_DELAY / 1000}s... (Attempt ${attempt})`);
           setTimeout(() => trySummarize(attempt + 1), RETRY_DELAY);
           return;
         }
 
-        console.error("Gemini API Error Response:", data);
-        throw new Error(data.message || "Gemini service failed to summarize.");
+        throw new Error(data.message || "Failed to generate summary.");
       }
 
       setSummary(data.summary);
     } catch (err) {
-      console.error("Fetch error:", err);
-      setError(err.message || "Something went wrong while summarizing.");
+      console.error("Summarize error:", err);
+      setError(err.message || "Something went wrong.");
     } finally {
       setLoading(false);
     }
