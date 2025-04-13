@@ -79,8 +79,8 @@ const Stories = () => {
               );
             })
           ) : (
-            <p className="text-center text-gray-400 text-xl font-medium tracking-wide italic">
-              No stories available at the moment.
+            <p className="text-center text-gray-400 text-3xl font-medium tracking-wide italic">
+          Plese wait loading the stories... 
             </p>
           )}
         </div>
