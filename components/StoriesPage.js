@@ -17,7 +17,8 @@ const Stories = () => {
           url += `&category=${encodeURIComponent(category)}`;
         }
 
-        const response = await fetch(url, { cache: "no-store" });
+        const response = await fetch(url, { next: { revalidate: 3600 } });
+        // const response = await fetch(url, { cache: "no-store" });
         if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
         const data = await response.json();
