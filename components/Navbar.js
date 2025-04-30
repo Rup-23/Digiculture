@@ -1,213 +1,128 @@
-// "use client";
-// import { useState } from "react";
-// import Link from "next/link";
-// import { FaBars, FaTimes, FaSearch } from "react-icons/fa";
-// import { UserButton } from "@clerk/nextjs";
-
-// export default function Navbar() {
-//   const [menuOpen, setMenuOpen] = useState(false);
-//   const [searchQuery, setSearchQuery] = useState("");
-
-//   const handleSearch = (e) => {
-//     e.preventDefault();
-//     alert(`Searching for: ${searchQuery}`);
-//     setSearchQuery(""); // Reset search bar
-//   };
-
-//   return (
-//     <nav className="bg-gray-900 text-white shadow-lg fixed top-0 w-full z-50">
-//       <div className="w-full px-6 lg:px-8">
-//         <div className="flex justify-between items-center py-4">
-//           {/* Logo */}
-//           <Link href="/" className="text-2xl font-bold text-white">
-//             DigiCulTure
-//           </Link>
-
-//           {/* Desktop Navigation */}
-//           <div className="hidden md:flex space-x-6 items-center">
-//             <NavLink href="/" text="Home" setMenuOpen={setMenuOpen} />
-//             <NavLink href="/about" text="About Us" setMenuOpen={setMenuOpen} />
-//             <NavLink href="/stories" text="Stories" setMenuOpen={setMenuOpen} />
-//             <NavLink href="/contact" text="Contact" setMenuOpen={setMenuOpen} />
-
-//             {/* Search Bar */}
-//             <form onSubmit={handleSearch} className="relative">
-//               <input
-//                 type="text"
-//                 className="bg-gray-800 text-white px-4 py-2 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-400"
-//                 placeholder="Search..."
-//                 value={searchQuery}
-//                 onChange={(e) => setSearchQuery(e.target.value)}
-//               />
-//               <button type="submit" className="absolute right-3 top-3 text-gray-400 hover:text-white">
-//                 <FaSearch />
-//               </button>
-//             </form>
-//             <UserButton />
-//           </div>
-
-//           {/* Mobile Menu Button */}
-//           <button
-//             className="md:hidden text-gray-400 hover:text-white focus:outline-none"
-//             onClick={() => setMenuOpen(!menuOpen)}
-//           >
-//             {menuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
-//           </button>
-//         </div>
-
-//         {/* Mobile Navigation */}
-//         {menuOpen && (
-//           <div className="md:hidden rounded-lg shadow-md p-5 space-y-5">
-//             <NavLink href="/" text="Home" mobile setMenuOpen={setMenuOpen} />
-//             <NavLink href="/about" text="About Us" mobile setMenuOpen={setMenuOpen} />
-//             <NavLink href="/stories" text="Stories" mobile setMenuOpen={setMenuOpen} />
-//             <NavLink href="/contact" text="Contact" mobile setMenuOpen={setMenuOpen} />
-
-//             {/* Search Bar in Mobile */}
-//             <form onSubmit={handleSearch} className="flex items-center space-x-2">
-//               <input
-//                 type="text"
-//                 className="flex-1 bg-gray-700 text-white px-3 py-3 rounded-full focus:outline-none"
-//                 placeholder="Search..."
-//                 value={searchQuery}
-//                 onChange={(e) => setSearchQuery(e.target.value)}
-//               />
-//               <button type="submit" className="bg-blue-500 p-3 rounded-full">
-//                 <FaSearch className="text-white size-5 " />
-//               </button>
-//             </form>
-
-//             {/* User Button positioned properly */}
-//             <div className="flex justify-center">
-//               <UserButton />
-//             </div>
-//           </div>
-//         )}
-//       </div>
-//     </nav>
-//   );
-// }
-
-// // Reusable NavLink Component (Now closes menu on click)
-// function NavLink({ href, text, mobile, setMenuOpen }) {
-//   return (
-//     <Link
-//       href={href}
-//       className={`block ${
-//         mobile ? "py-2 text-center text-gray-300 hover:text-white" : "text-gray-400 hover:text-white transition duration-300"
-//       }`}
-//       onClick={() => setMenuOpen(false)} // Close menu when clicked
-//     >
-//       {text}
-//     </Link>
-//   );
-// }
-
-
-
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { FaBars, FaTimes, FaSearch } from "react-icons/fa";
+import { FaBars, FaTimes } from "react-icons/fa";
 import { UserButton } from "@clerk/nextjs";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [scrolled, setScrolled] = useState(false);
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    alert(`Searching for: ${searchQuery}`);
-    setSearchQuery("");
-  };
+  // Handle scroll effect for navbar
+  useEffect(() => {
+    const handleScroll = () => {
+      const isScrolled = window.scrollY > 20;
+      if (isScrolled !== scrolled) {
+        setScrolled(isScrolled);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [scrolled]);
 
   return (
-    <nav className="bg-opacity-80 backdrop-blur-lg bg-[#0A0A0A] text-[#E0C097] shadow-xl fixed top-0 w-full z-50 border-b border-[#E0C097]">
-      <div className="w-full px-6 lg:px-12">
-        <div className="flex justify-between items-center py-5">
+    <nav 
+      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+        scrolled 
+          ? "bg-black bg-opacity-90 backdrop-blur-lg shadow-xl" 
+          : "bg-black bg-opacity-60 backdrop-blur-md"
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-20">
           {/* Logo */}
-          <Link href="/" className="text-3xl font-extrabold tracking-widest text-[#F4A261] drop-shadow-lg">
-            DigiCulTure
+          <Link 
+            href="/" 
+            className="group flex items-center space-x-2"
+          >
+            <span className="text-3xl font-serif font-bold tracking-wider text-amber-500 group-hover:text-amber-400 transition-all duration-300">
+              DigiCulTure
+            </span>
+            <span className="hidden md:block h-6 w-px bg-amber-500/30"></span>
+            <span className="hidden md:block text-sm uppercase tracking-widest text-amber-500/80">
+              Digital Museum
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex space-x-8 items-center text-lg font-medium">
-            <NavLink href="/" text="Home" setMenuOpen={setMenuOpen} />
-            <NavLink href="/about" text="About" setMenuOpen={setMenuOpen} />
-            <NavLink href="/stories" text="Stories" setMenuOpen={setMenuOpen} />
-            <NavLink href="/contact" text="Contact" setMenuOpen={setMenuOpen} />
-
-            {/* Search Bar */}
-            <form onSubmit={handleSearch} className="relative">
-              <input
-                type="text"
-                className="bg-[#1B1B1B] text-[#E0C097] px-5 py-2 rounded-full focus:outline-none focus:ring-2 focus:ring-[#E9C46A] placeholder-gray-400"
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+          <div className="hidden md:flex items-center space-x-8">
+            <div className="flex space-x-1">
+              <NavLink href="/" text="Home" />
+              <NavLink href="/about" text="About" />
+              <NavLink href="/stories" text="Stories" />
+              <NavLink href="/contact" text="Contact" />
+            </div>
+            
+            <div className="ml-6 flex items-center">
+              <div className="h-8 w-px bg-amber-500/30 mr-6"></div>
+              <UserButton 
+                afterSignOutUrl="/"
+                appearance={{
+                  elements: {
+                    avatarBox: "h-10 w-10"
+                  }
+                }}
               />
-              <button type="submit" className="absolute right-3 top-3 text-[#E9C46A] hover:text-white">
-                <FaSearch size={18} />
-              </button>
-            </form>
-            <UserButton />
+            </div>
           </div>
 
           {/* Mobile Menu Button */}
-          <button
-            className="md:hidden text-[#E9C46A] hover:text-white focus:outline-none"
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
-            {menuOpen ? <FaTimes size={26} /> : <FaBars size={26} />}
-          </button>
-        </div>
-
-        {/* Mobile Navigation */}
-        {menuOpen && (
-          <div className="md:hidden bg-[#0A0A0A] bg-opacity-90 rounded-lg shadow-lg p-6 space-y-5 border border-[#E0C097]">
-            <NavLink href="/" text="Home" mobile setMenuOpen={setMenuOpen} />
-            <NavLink href="/about" text="About" mobile setMenuOpen={setMenuOpen} />
-            <NavLink href="/stories" text="Stories" mobile setMenuOpen={setMenuOpen} />
-            <NavLink href="/contact" text="Contact" mobile setMenuOpen={setMenuOpen} />
-
-            {/* Search Bar in Mobile */}
-            <form onSubmit={handleSearch} className="flex items-center space-x-2">
-              <input
-                type="text"
-                className="flex-1 bg-[#1B1B1B] text-[#E0C097] px-2 py-3 rounded-full focus:outline-none placeholder-gray-400"
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-              <button type="submit" className="bg-[#E9C46A] p-2 rounded-full">
-                <FaSearch className="text-[#16213E] size-5" />
-              </button>
-            </form>
-
-            {/* User Button positioned properly */}
-            <div className="flex justify-center">
-              <UserButton />
-            </div>
+          <div className="flex items-center md:hidden">
+            <UserButton 
+              afterSignOutUrl="/"
+              appearance={{
+                elements: {
+                  avatarBox: "h-8 w-8 mr-4"
+                }
+              }}
+            />
+            <button
+              className="text-amber-500 hover:text-amber-400 focus:outline-none transition duration-300"
+              onClick={() => setMenuOpen(!menuOpen)}
+            >
+              {menuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+            </button>
           </div>
-        )}
+        </div>
+      </div>
+
+      {/* Mobile Navigation */}
+      <div 
+        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+          menuOpen ? "max-h-80" : "max-h-0"
+        }`}
+      >
+        <div className="bg-black bg-opacity-95 border-t border-amber-900/30 px-4 py-3 space-y-3">
+          <NavLink href="/" text="Home" mobile setMenuOpen={setMenuOpen} />
+          <NavLink href="/about" text="About" mobile setMenuOpen={setMenuOpen} />
+          <NavLink href="/stories" text="Stories" mobile setMenuOpen={setMenuOpen} />
+          <NavLink href="/contact" text="Contact" mobile setMenuOpen={setMenuOpen} />
+        </div>
       </div>
     </nav>
   );
 }
 
-// Reusable NavLink Component with hover effect
+// Enhanced NavLink Component with refined hover effect
 function NavLink({ href, text, mobile, setMenuOpen }) {
   return (
     <Link
       href={href}
-      className={`block ${
+      className={`relative ${
         mobile
-          ? "py-2 text-center text-[#E0C097] hover:text-[#F4A261]"
-          : "text-[#E0C097] hover:text-[#F4A261] transition duration-300"
+          ? "block py-3 text-lg text-amber-500 hover:text-amber-400 border-b border-amber-900/30 transition duration-300"
+          : "px-5 py-2 text-amber-500 hover:text-amber-400 font-medium relative overflow-hidden group"
       }`}
-      onClick={() => setMenuOpen(false)}
+      onClick={() => mobile && setMenuOpen(false)}
     >
-      {text}
+      {!mobile && (
+        <>
+          <span className="relative z-10 transition duration-300">{text}</span>
+          <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-500 group-hover:w-full transition-all duration-300"></span>
+        </>
+      )}
+      {mobile && text}
     </Link>
   );
 }
