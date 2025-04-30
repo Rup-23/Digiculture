@@ -1,119 +1,4 @@
 
-// import dbConnect from "@/lib/dbConnect";
-// import Story from "@/models/storyModel";
-// import Link from "next/link";
-// import SummarizeButtonWrapper from "@/components/SummarizeButtonWrapper";
-
-// export default async function StoryPage({ params }) {
-//   await dbConnect();
-//   const { id } = await params;
-
-//   if (!id) {
-//     return <p className="text-center text-gray-400 text-xl font-semibold">Invalid Story ID</p>;
-//   }
-
-//   let story;
-//   try {
-//     story = await Story.findById(id);
-//     if (!story) {
-//       return <p className="text-center text-gray-400 text-xl font-semibold">Story not found</p>;
-//     }
-//   } catch (error) {
-//     console.error("Error fetching story:", error);
-//     return <p className="text-center text-red-500 text-xl font-semibold">Error loading story</p>;
-//   }
-
-//   const storyText = story.content
-//     .filter((item) => item.type === "text")
-//     .map((item) => item.value)
-//     .join(" ");
-
-//   return (
-//     <div className="w-full min-h-screen bg-[#1A1A1A] text-gray-100 flex flex-col items-center py-28  px-6">
-//       {/* Header Section */}
-//       <div className="text-center mb-16 max-w-3xl border-b-2 border-[#FFD700] pb-6">
-//         <h1 className="text-5xl font-bold text-[#FFD700] uppercase tracking-wider">{story.title}</h1>
-//         <p className="text-md text-gray-400 mt-3 italic">Story Type: {story.storyType || "Exhibit"}</p>
-//       </div>
-
-//       {/* About the Exhibit */}
-//       <div className="bg-[#2A2A2A] border border-[#FFD700] rounded-xl p-6 mb-10 max-w-3xl w-full shadow-xl">
-//         <h2 className="text-2xl font-semibold text-[#FFD700] mb-2">About this Exhibit</h2>
-//         <p className="text-md text-gray-300 leading-relaxed text-justify">
-//           This exhibit is a curated story reflecting a unique piece of cultural or historical relevance. Explore the visuals and narratives as if you're walking through a museum gallery.
-//         </p>
-//       </div>
-
-//       {/* Exhibit Gallery */}
-//       <div className="grid gap-12 max-w-4xl w-full grid-cols-1 md:grid-cols-2">
-//         {story.content.map((item, index) => (
-//           <div key={index} className="bg-[#222] rounded-lg p-4 border border-[#FFD700] shadow-md">
-//             {item.type === "text" && (
-//               <div>
-//                 <h3 className="text-lg font-semibold text-[#FFD700] mb-2">Narrative Excerpt</h3>
-//                 <p className="text-gray-300 leading-relaxed text-justify font-serif">"{item.value}"</p>
-//               </div>
-//             )}
-//             {item.type === "image" && (
-//               <div>
-//                 <img
-//                   src={item.value}
-//                   alt="Exhibit"
-//                   className="rounded-lg object-contain w-full"
-//                 />
-//                 <p className="text-sm text-gray-400 mt-2 italic text-center">Photographic artifact</p>
-//               </div>
-//             )}
-//             {item.type === "video" && (
-//               <div>
-//                 <video controls className="rounded-lg w-full">
-//                   <source src={item.value} />
-//                 </video>
-//                 <p className="text-sm text-gray-400 mt-2 italic text-center">Video archive material</p>
-//               </div>
-//             )}
-//             {item.type === "audio" && (
-//               <div className="bg-[#333] rounded-lg p-4 border border-[#FFD700]">
-//                 <audio
-//                   controls
-//                   className="w-full rounded-lg bg-[#2A2A2A] p-3 text-[#FFD700] outline-none"
-//                   style={{
-//                     backgroundColor: "#1A1A1A",
-//                     borderRadius: "12px",
-//                     border: "none",
-//                   }}
-//                 >
-//                   <source src={item.value} />
-//                 </audio>
-//                 <p className="text-sm text-gray-400 mt-2 italic text-center">Audio commentary or oral history</p>
-//               </div>
-//             )}
-//           </div>
-//         ))}
-//       </div>
-
-//       {/* Summarize Button */}
-//       <div className="mt-16">
-//         <SummarizeButtonWrapper storyText={storyText} />
-//       </div>
-
-//       {/* Share CTA */}
-//       <div className="text-center mt-24 max-w-3xl">
-//         <h2 className="text-4xl font-bold text-[#FFD700] mb-4">Contribute to the Archive</h2>
-//         <p className="text-lg text-gray-400 mb-6 leading-relaxed">
-//           Every story matters. Help us preserve human experiences by submitting your own cultural, historical, or personal narrative.
-//         </p>
-//         <Link href="/stories/form">
-//           <button className="bg-[#FFD700] text-black font-bold py-2 px-5 rounded-md hover:shadow-lg transition-all">
-//             Submit Your Story
-//           </button>
-//         </Link>
-//       </div>
-//     </div>
-//   );
-// }
-
-
 import dbConnect from "@/lib/dbConnect";
 import Story from "@/models/storyModel";
 import Link from "next/link";
@@ -315,10 +200,10 @@ export default async function StoryPage({ params }) {
                         <span className="text-gray-400">Type:</span>
                         <span className="text-white">{story.storyType || "Historical Account"}</span>
                       </div>
-                      <div className="flex justify-between text-sm">
+                      {/* <div className="flex justify-between text-sm">
                         <span className="text-gray-400">Date Added:</span>
                         <span className="text-white">{new Date().toLocaleDateString()}</span>
-                      </div>
+                      </div> */}
                       <div className="flex justify-between text-sm">
                         <span className="text-gray-400">Collection:</span>
                         <span className="text-white">Untold Stories</span>
@@ -377,35 +262,6 @@ export default async function StoryPage({ params }) {
           </div>
         </div>
         
-        {/* Related Exhibits
-        // <div className="bg-black/50 border-t border-white/5 mt-12">
-        //   <div className="max-w-6xl mx-auto px-6 py-12">
-        //     <h2 className="text-2xl font-serif text-white mb-8">Related Exhibits</h2>
-        //     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        //       {[1, 2, 3].map((item) => (
-        //         <div key={item} className="bg-gradient-to-br from-[#1A1A1A] to-[#0F0F0F] rounded-lg overflow-hidden shadow-lg border border-white/5 hover:border-[#FFD700]/30 transition-all">
-        //           <div className="h-40 bg-gray-800"></div>
-        //           <div className="p-4">
-        //             <p className="text-xs uppercase tracking-wider text-gray-500 font-medium mb-2">Historical Account</p>
-        //             <h3 className="text-white font-serif text-lg mb-2">Related Story Title {item}</h3>
-        //             <p className="text-gray-400 text-sm">A brief description of this related exhibit in the digital museum collection.</p>
-        //             <div className="mt-4">
-        //               <Link href={`/stories/${item}`}>
-        //                 <button className="text-sm text-[#FFD700] hover:underline flex items-center">
-        //                   View Exhibit
-        //                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        //                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-        //                   </svg>
-        //                 </button>
-        //               </Link>
-        //             </div>
-        //           </div>
-        //         </div>
-        //       ))}
-        //     </div>
-        //   </div>
-        // </div> */}
-        
         {/* Contribute Call to Action */}
         <div className="bg-gradient-to-b from-[#080808] to-black border-t border-white/5">
           <div className="max-w-6xl mx-auto px-6 py-16">
@@ -416,7 +272,7 @@ export default async function StoryPage({ params }) {
               </p>
               <Link href="/stories/form">
                 <button className="bg-[#FFD700] text-black font-bold py-3 px-8 rounded-md hover:bg-[#E5C100] transition-all">
-                  Submit Your Story
+                  Share Your Story
                 </button>
               </Link>
             </div>

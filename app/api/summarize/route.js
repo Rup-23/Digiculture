@@ -88,7 +88,7 @@ export async function POST(req) {
               role: "user",
               parts: [
                 {
-                  text: `Please provide a detailed summary of the following story. Highlight the key events, characters, emotions, and any important messages or morals. Make it descriptive and around 3–5 paragraphs long:\n\n${text}`,
+                  text: `Please provide a detailed summary of the following story. Highlight the key events, characters, emotions, and any important messages or morals also some history. Make it descriptive and around 8-10 line long:\n\n${text}`,
                 },
               ],
             },
