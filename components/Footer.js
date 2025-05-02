@@ -97,9 +97,7 @@ export default function Footer() {
           </div>
           <div className="mt-3 md:mt-0 text-xs">
             <Link href="/privacy" className="text-gray-500 hover:text-[#d4af37] mx-2 transition-colors duration-300">Privacy Policy</Link>
-            <span className="text-gray-700">|</span>
-            <Link href="/terms" className="text-gray-500 hover:text-[#d4af37] mx-2 transition-colors duration-300">Terms of Use</Link>
-          </div>
+         </div>
         </div>
       </div>
       

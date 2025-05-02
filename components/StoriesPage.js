@@ -89,7 +89,7 @@ const Stories = () => {
             <CategoryLink current={category} category={null} label="All Stories" />
             <CategoryLink current={category} category="Real-Life" label="Real-Life" />
             <CategoryLink current={category} category="Folklore" label="Folklore" />
-            <CategoryLink current={category} category="Myth" label="Myth" />
+            <CategoryLink current={category} category="Ancient Heritages" label="Ancient Heritages" />
             <CategoryLink current={category} category="Local Culture" label="Local Culture" />
           </div>
         </header>

@@ -72,9 +72,13 @@
 
 
 
-
-"use client";
 import Link from "next/link";
+
+
+export const metadata = {
+  title: 'About Us | Digital Museum',
+  description: 'Discover the mission and vision behind the Digital Museum of Untold Stories.',
+};
 
 export default function About() {
   return (

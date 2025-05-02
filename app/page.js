@@ -1,6 +1,11 @@
 import { Suspense } from "react";
 import HomePage from "@/components/HomePage";
 
+export const metadata = {
+  title: 'Digital Museum of Untold Stories',
+  description: 'Explore the Digital Museum of Untold Stories, a platform for sharing and preserving cultural narratives.',
+};
+
 export default function Home() {
   return (
     <Suspense fallback={<div className="text-white text-center text-xl p-12">Loading Museum...</div>}>

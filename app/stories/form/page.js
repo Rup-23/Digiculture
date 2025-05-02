@@ -76,7 +76,7 @@
 //           className="w-full text-lg bg-[#2d2528] border border-[#f5d061] p-3 rounded-md text-[#e3c27e] font-medium shadow-sm"
 //         >
 //           <option value="">Select Story Type</option>
-//           {["Real-Life", "Folklore", "Myth", "Local Culture"].map((opt) => (
+//           {["Real-Life", "Folklore", "Ancient Heritages", "Local Culture"].map((opt) => (
 //             <option key={opt} value={opt}>{opt}</option>
 //           ))}
 //         </select>
@@ -228,7 +228,7 @@ const StorySubmission = () => {
                 className="w-full bg-gray-700 border-0 rounded-lg px-4 py-3 text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               >
                 <option value="">Select a category</option>
-                {["Real-Life", "Folklore", "Myth", "Local Culture"].map((opt) => (
+                {["Real-Life", "Folklore", "Ancient Heritages", "Local Culture"].map((opt) => (
                   <option key={opt} value={opt}>{opt}</option>
                 ))}
               </select>

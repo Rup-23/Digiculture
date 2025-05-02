@@ -207,7 +207,7 @@ const HomePage = () => {
 
   const sections = [
     { name: "Folklore", image: "/img10.jpg", desc: "Tales from the past, passed down through generations." },
-    { name: "Myth", image: "/img4.jpg", desc: "Legends, gods, and the mystical elements that shape our beliefs." },
+    { name: "Ancient Heritages", image: "/img4.jpg", desc: "Legends, gods, and the mystical elements that shape our beliefs." },
     { name: "Real-Life", image: "/img7.jpg", desc: "True stories of ordinary people doing extraordinary things." },
     { name: "Local Culture", image: "/img9.jpg", desc: "Traditions, rituals, and customs that define a community." },
   ];
@@ -223,7 +223,7 @@ const HomePage = () => {
       {/* Introductory Text */}
       <div className="text-center mb-8 sm:mb-12 px-4 sm:px-6">
         <p className="text-base sm:text-lg text-gray-300 text-justify mx-0 sm:mx-2">
-          Welcome to the Digital Museum of Untold Stories, a platform dedicated to sharing and preserving the myths, folklore, and real-life experiences that shape our diverse cultures. 
+          Welcome to the Digital Museum of Untold Stories, a platform dedicated to sharing and preserving the Ancient Heritages, folklore, and real-life experiences that shape our diverse cultures. 
           Here, anyone can contribute their personal stories, local traditions, or ancient legends, ensuring that these narratives are never forgotten. Join us in preserving history, one story at a time.History is often written in books, but the most powerful stories often go untold. This is a place for those stories – the ones that are passed down through generations, the stories that shape our communities, and the narratives that are left behind in the shadows of mainstream media. Here, every story matters. Whether it's a tale of mythical creatures or the real struggles of everyday life, we preserve them, cherish them, and share them with the world
         </p>
       </div>

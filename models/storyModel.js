@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const StorySchema = new mongoose.Schema({
   title: { type: String, required: true },
-  storyType: { type: String, enum: ["Myth", "Folklore", "Real-Life", "Local Culture"], required: true },
+  storyType: { type: String, enum: ["Ancient Heritages", "Folklore", "Real-Life", "Local Culture"], required: true },
   content: [
     {
       type: { type: String, enum: ["text", "image", "audio", "video"], required: true },
