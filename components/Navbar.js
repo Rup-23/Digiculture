@@ -37,11 +37,11 @@ export default function Navbar() {
             className="group flex items-center space-x-2"
           >
             <span className="text-3xl font-serif font-bold tracking-wider text-amber-500 group-hover:text-amber-400 transition-all duration-300">
-              DigiCulTure
+              DG CULTURE
             </span>
             <span className="hidden md:block h-6 w-px bg-amber-500/30"></span>
             <span className="hidden md:block text-sm uppercase tracking-widest text-amber-500/80">
-              Digital Museum
+              Digital Museum of Untold Stories
             </span>
           </Link>
 
